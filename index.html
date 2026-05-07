@@ -8,7 +8,7 @@
         body { font-family: sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
         .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 400px; }
         h2 { color: #2e7d32; }
-        input { width: 100%; padding: 12px; margin: 20px 0; border: 2px solid #ddd; border-radius: 10px; box-sizing: border-box; }
+        input { width: 100%; padding: 12px; margin: 20px 0; border: 2px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 16px; }
         #status { font-size: 22px; font-weight: bold; min-height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
         .slobodno { color: #2e7d32; background: #e8f5e9; }
         .zauzeto { color: #c62828; background: #ffebee; }
@@ -25,6 +25,7 @@
     <div class="list"><strong>Zauzeto:</strong> <span id="listaBiljaka"></span></div>
 </div>
 <script>
+    // LISTA BILJAKA (BEZ BZ I VISIBABE)
     const bazaBiljaka = [
         "Paprika", "Paprat", "Bujad", "Divlji anis", "Persun", "Divlja ruza",
         "Nana", "Menta", "Kunica", "Paradajz", "Domaca jagoda", "List jagorcevine",
@@ -34,7 +35,7 @@
         "Ruza", "Ljutic", "Zimzelen", "Rospas", "Alyssum", "Draca", "Kupina",
         "Lovor", "Zova", "Sipurak", "Ljubicica", "Jabuka", "Kruska", "Sljiva",
         "Lipa", "Poljski javor", "Zmijina trava", "Sparoga", "Zimzeleni simsir",
-        "Poljska preslica", "Bz", "Visibaba"
+        "Poljska preslica"
     ];
 
     function normalizuj(t) {
