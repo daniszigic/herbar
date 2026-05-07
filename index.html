@@ -36,7 +36,6 @@
 </div>
 
 <script>
-    // --- TVOJA AKTUALNA LISTA ---
     const bazaBiljaka = [
         "Paprika", "Paprat", "Bujad", "Divlji anis", "Persun", "Divlja ruza",
         "Nana", "Menta", "Kunica", "Paradajz", "Domaca jagoda", "List jagorcevine",
@@ -45,7 +44,9 @@
         "Smokva", "Vejgela", "Kadulja", "Tamaris", "Bagrem",
         "Maslacak", "Kopriva", "Cicak", "Bokvica", "Djetelina", "Ruza",
         "Ljutic", "Zimzelen", "Rospas", "Alyssum", "Draca", "Kupina", "Lovor", 
-        "Zova", "Sipurak", "Ljubicica", "Jabuka", "Kruska", "Sljiva", "Lipa","poljski javor","zmijina trava","šparoga","zimzeleni šimšir","poljska preslica","bz"
+        "Zova", "Sipurak", "Ljubicica", "Jabuka", "Kruska", "Sljiva", "Lipa",
+        "Poljski javor", "Zmijina trava", "Šparoga", "Zimzeleni šimšir", 
+        "Poljska preslica"
     ];
 
     function normalizuj(tekst) {
@@ -68,7 +69,6 @@
         }
     }
 
-    // Automatsko sortiranje i brojanje
     document.getElementById('listaBiljaka').innerText = bazaBiljaka.sort().join(", ");
     document.getElementById('brojac').innerText = bazaBiljaka.length + " biljaka";
 </script>
