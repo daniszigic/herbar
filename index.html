@@ -3,74 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Herbar Provjera - Razred</title>
+    <title>Herbar Provjera</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; width: 100%; max-width: 450px; }
-        h2 { color: #2e7d32; margin-top: 0; }
-        input { width: 100%; padding: 15px; margin: 20px 0; border: 2px solid #ddd; border-radius: 12px; font-size: 18px; box-sizing: border-box; outline: none; transition: 0.3s; }
-        input:focus { border-color: #4caf50; box-shadow: 0 0 8px rgba(76,175,80,0.3); }
-        #status { font-size: 26px; font-weight: bold; min-height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 12px; transition: 0.3s; }
-        .slobodno { color: #2e7d32; background: #e8f5e9; border: 2px solid #a5d6a7; }
-        .zauzeto { color: #c62828; background: #ffebee; border: 2px solid #ef9a9a; }
-        .stats { margin-top: 20px; font-size: 14px; color: #555; background: #f9f9f9; padding: 10px; border-radius: 8px; }
-        .list-container { margin-top: 20px; text-align: left; font-size: 13px; color: #777; max-height: 150px; overflow-y: auto; border-top: 1px solid #eee; padding-top: 10px; }
+        body { font-family: sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 400px; }
+        h2 { color: #2e7d32; }
+        input { width: 100%; padding: 12px; margin: 20px 0; border: 2px solid #ddd; border-radius: 10px; box-sizing: border-box; }
+        #status { font-size: 22px; font-weight: bold; min-height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+        .slobodno { color: #2e7d32; background: #e8f5e9; }
+        .zauzeto { color: #c62828; background: #ffebee; }
+        .stats { margin-top: 20px; font-size: 14px; background: #eee; padding: 10px; border-radius: 5px; }
+        .list { margin-top: 15px; text-align: left; font-size: 12px; color: #666; max-height: 100px; overflow-y: auto; border-top: 1px solid #ddd; padding-top: 10px; }
     </style>
 </head>
 <body>
-
 <div class="card">
     <h2>🌿 Herbar Provjera</h2>
-    <p>Provjeri da li je biljka već zauzeta:</p>
     <input type="text" id="pretraga" placeholder="Kucaj naziv biljke..." oninput="checkPlant()">
     <div id="status"></div>
-
-    <div class="stats">
-        Trenutno zauzeto: <strong id="brojac">0 biljaka</strong>
-    </div>
-
-    <div class="list-container">
-        <strong>Spisak zauzetih (A-Ž):</strong><br>
-        <span id="listaBiljaka"></span>
-    </div>
+    <div class="stats">Trenutno zauzeto: <strong id="brojac">0</strong> biljaka</div>
+    <div class="list"><strong>Zauzeto:</strong> <span id="listaBiljaka"></span></div>
 </div>
-
 <script>
     const bazaBiljaka = [
         "Paprika", "Paprat", "Bujad", "Divlji anis", "Persun", "Divlja ruza",
         "Nana", "Menta", "Kunica", "Paradajz", "Domaca jagoda", "List jagorcevine",
-        "List kestena", "List bora", "Behar", "Visnja",
-        "Cempres", "List grozda", "Pelargonija", "Petunija", "Smreka",
-        "Smokva", "Vejgela", "Kadulja", "Tamaris", "Bagrem",
-        "Maslacak", "Kopriva", "Cicak", "Bokvica", "Djetelina", "Ruza",
-        "Ljutic", "Zimzelen", "Rospas", "Alyssum", "Draca", "Kupina", "Lovor", 
-        "Zova", "Sipurak", "Ljubicica", "Jabuka", "Kruska", "Sljiva", "Lipa",
-        "Poljski javor", "Zmijina trava", "Šparoga", "Zimzeleni šimšir", 
-        "Poljska preslica"
+        "List kestena", "List bora", "Behar", "Visnja", "Cempres", "List grozda",
+        "Pelargonija", "Petunija", "Smreka", "Smokva", "Vejgela", "Kadulja",
+        "Tamaris", "Bagrem", "Maslacak", "Kopriva", "Cicak", "Bokvica", "Djetelina",
+        "Ruza", "Ljutic", "Zimzelen", "Rospas", "Alyssum", "Draca", "Kupina",
+        "Lovor", "Zova", "Sipurak", "Ljubicica", "Jabuka", "Kruska", "Sljiva",
+        "Lipa", "Poljski javor", "Zmijina trava", "Sparoga", "Zimzeleni simsir",
+        "Poljska preslica", "Bz", "Visibaba"
     ];
 
-    function normalizuj(tekst) {
-        return tekst.toLowerCase().trim()
-            .replace(/č/g, "c").replace(/ć/g, "c")
-            .replace(/š/g, "s").replace(/ž/g, "z").replace(/đ/g, "d");
+    function normalizuj(t) {
+        return t.toLowerCase().trim().replace(/č/g,"c").replace(/ć/g,"c").replace(/š/g,"s").replace(/ž/g,"z").replace(/đ/g,"d");
     }
 
     function checkPlant() {
-        let unos = normalizuj(document.getElementById('pretraga').value);
-        let statusDiv = document.getElementById('status');
-        if (unos === "") { statusDiv.innerHTML = ""; statusDiv.className = ""; return; }
-        let pronadjena = bazaBiljaka.some(b => normalizuj(b) === unos);
-        if (pronadjena) {
-            statusDiv.innerHTML = "❌ ZAUZETO";
-            statusDiv.className = "zauzeto";
-        } else {
-            statusDiv.innerHTML = "✅ SLOBODNO";
-            statusDiv.className = "slobodno";
-        }
+        let u = normalizuj(document.getElementById('pretraga').value);
+        let s = document.getElementById('status');
+        if(u===""){s.innerHTML="";s.className="";return;}
+        let p = bazaBiljaka.some(b => normalizuj(b) === u);
+        if(p){ s.innerHTML="❌ ZAUZETO"; s.className="zauzeto"; }
+        else { s.innerHTML="✅ SLOBODNO"; s.className="slobodno"; }
     }
 
     document.getElementById('listaBiljaka').innerText = bazaBiljaka.sort().join(", ");
-    document.getElementById('brojac').innerText = bazaBiljaka.length + " biljaka";
+    document.getElementById('brojac').innerText = bazaBiljaka.length;
 </script>
 </body>
 </html>
