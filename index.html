@@ -15,22 +15,7 @@
         .zauzeto { background: #ffebee; color: #c62828; }
         .slobodno { background: #e8f5e9; color: #2e7d32; }
         
-        /* POPRAVLJEN SIDEBAR */
-        .sidebar { 
-            position: fixed; 
-            top: 0; 
-            right: -100%; 
-            width: 320px; 
-            height: 100vh; 
-            background: white; 
-            box-shadow: -5px 0 15px rgba(0,0,0,0.2); 
-            transition: 0.4s; 
-            z-index: 100; 
-            padding: 20px; 
-            text-align: left; 
-            overflow-y: auto; /* Omogućava skrolanje */
-            box-sizing: border-box;
-        }
+        .sidebar { position: fixed; top: 0; right: -100%; width: 320px; height: 100vh; background: white; box-shadow: -5px 0 15px rgba(0,0,0,0.2); transition: 0.4s; z-index: 100; padding: 20px; text-align: left; overflow-y: auto; box-sizing: border-box; }
         .sidebar.active { right: 0; }
         .menu-btn { position: absolute; top: 15px; right: 20px; font-size: 30px; cursor: pointer; color: #2e7d32; z-index: 101; }
         .close-btn { float: right; font-size: 30px; cursor: pointer; color: #999; line-height: 1; }
@@ -39,8 +24,14 @@
         .student-name { font-weight: bold; display: block; color: #2e7d32; }
         .student-plants { color: #555; font-style: italic; }
         
-        /* DODATNI PROSTOR NA DNU ZA ŠEJLU */
-        #fullList { padding-bottom: 150px; }
+        /* Stil za one koji nisu predali */
+        .missing-section { margin-top: 20px; padding: 10px; background: #fff3e0; border-radius: 10px; border-left: 5px solid #ff9800; }
+        .missing-name { font-size: 13px; color: #e65100; display: inline-block; margin-right: 5px; }
+        .missing-name::after { content: ","; }
+        .missing-name:last-child::after { content: "."; }
+
+        #fullList { padding-bottom: 20px; }
+        #missingList { padding-bottom: 150px; }
     </style>
 </head>
 <body>
@@ -50,7 +41,6 @@
 <div class="sidebar" id="sidebar">
     <span class="close-btn" onclick="toggleMenu()">×</span>
     <h3>➕ Dodaj biljku</h3>
-    <p style="font-size: 13px; color: #666;">Izaberi ime i unesi biljku:</p>
     
     <select id="studentName">
         <option>Adna Adorović</option><option>Aja Agić</option><option>Ajna Odobašić</option>
@@ -69,8 +59,13 @@
     <button onclick="savePlant()">SAČUVAJ NA SAJT</button>
     
     <hr>
-    <h3>📋 Spisak zauzetih biljaka</h3>
+    <h3>📋 Zauzete biljke</h3>
     <div id="fullList">Učitavanje...</div>
+
+    <div class="missing-section">
+        <h4 style="margin: 0 0 10px 0; color: #e65100;">⚠️ Nisu još predali:</h4>
+        <div id="missingList">Provjera...</div>
+    </div>
 </div>
 
 <div class="card">
@@ -82,6 +77,8 @@
 
 <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbwkgb1vgEgc-6X-M3rcf8tcBTDMgzVpZ61cU1kE8ieEC5VzwNNVdIS0aQ2swURPt3FBsQ/exec';
+    const sviUcenici = ["Adna Adorović", "Aja Agić", "Ajna Odobašić", "Amina Karić", "Amna Delić Husić", "Arman Varešlija", "Čamka Mehić", "Danis Žigić", "Davud Uzunović", "Edina Jusić", "Eldar Hajdarević", "Ema Avdić", "Emin Ređić", "Emra Čajlaković", "Hana Islambegović", "Hana Talić", "Hena Čobo", "Ilhan Hibić", "Iman Isaković", "Iman Mahmutagić", "Kerim Dedić", "Mithat Zildžić", "Nadina Kahriman", "Nejla Smriko", "Nejra Hazić", "Sajra Čaluk", "Sara Drapić", "Sara Kavaz", "Šejla Halilović", "Zejneb Doglod"];
+    
     let bazaPodataka = [];
 
     async function loadData() {
@@ -89,17 +86,34 @@
             const response = await fetch(scriptURL);
             const rawData = await response.json();
             const grupisano = {};
+            const predali = new Set();
+
             rawData.forEach(item => {
                 if(!grupisano[item.ime]) grupisano[item.ime] = [];
                 item.biljka.split(',').forEach(b => { if(b.trim()) grupisano[item.ime].push(b.trim()); });
+                predali.add(item.ime);
             });
+
             bazaPodataka = rawData; 
+            
+            // Lista onih koji SU predali
             const listDiv = document.getElementById('fullList');
             listDiv.innerHTML = "";
             for(let ime in grupisano) {
                 listDiv.innerHTML += `<div class="student-item"><span class="student-name">${ime}</span><span class="student-plants">${grupisano[ime].join(", ")}</span></div>`;
             }
-        } catch (e) { document.getElementById('fullList').innerHTML = "Greška u tabeli."; }
+
+            // Lista onih koji NISU predali
+            const missingDiv = document.getElementById('missingList');
+            const nisuPredali = sviUcenici.filter(ime => !predali.has(ime));
+            
+            if(nisuPredali.length === 0) {
+                missingDiv.innerHTML = "🎉 Svi su predali!";
+            } else {
+                missingDiv.innerHTML = nisuPredali.map(ime => `<span class="missing-name">${ime}</span>`).join("");
+            }
+
+        } catch (e) { console.error(e); }
     }
 
     function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
@@ -119,6 +133,12 @@
         let ime = document.getElementById('studentName').value;
         let biljka = document.getElementById('plantInput').value.trim();
         if (!biljka) return alert("Upiši biljku!");
+        
+        // Provjera duplikata prije slanja
+        if(bazaPodataka.some(red => red.biljka.split(',').some(b => normalizuj(b) === normalizuj(biljka)))) {
+            return alert("Ova biljka je već zauzeta! Provjeri spisak.");
+        }
+
         alert("Spremanje u toku...");
         try {
             await fetch(scriptURL, { method: 'POST', body: JSON.stringify({ ime: ime, biljka: biljka }) });
