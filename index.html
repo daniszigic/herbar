@@ -3,34 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Herbar Razreda</title>
+    <title>Herbar Razreda - Automatski</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f4f1; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; width: 100%; max-width: 400px; position: relative; border-top: 8px solid #2e7d32; }
-        h2 { color: #2e7d32; margin-top: 0; }
-        input { width: 100%; padding: 15px; margin: 20px 0; border: 2px solid #ddd; border-radius: 12px; font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s; }
-        input:focus { border-color: #2e7d32; box-shadow: 0 0 8px rgba(46,125,50,0.2); }
-        #status { font-size: 18px; font-weight: bold; min-height: 90px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 12px; transition: 0.3s; padding: 10px; border: 1px dashed #ccc; }
-        .slobodno { color: #2e7d32; background: #e8f5e9; border: none !important; }
-        .zauzeto { color: #c62828; background: #ffebee; border: none !important; }
-        .vlasnik { font-size: 15px; font-weight: normal; margin-top: 8px; color: #444; background: rgba(255,255,255,0.5); padding: 4px 10px; border-radius: 20px; }
-
-        /* Meni dugme */
-        .menu-btn { position: absolute; top: 15px; right: 20px; cursor: pointer; font-size: 28px; color: #2e7d32; transition: 0.3s; }
-        .menu-btn:hover { transform: scale(1.1); }
-
-        /* Sidebar */
-        .sidebar { position: fixed; top: 0; right: -100%; width: 320px; height: 100%; background: white; box-shadow: -5px 0 20px rgba(0,0,0,0.2); transition: 0.4s cubic-bezier(0, 1, 0.5, 1); z-index: 99; padding: 25px; box-sizing: border-box; overflow-y: auto; }
-        .sidebar.active { right: 0; }
-        .sidebar h3 { color: #2e7d32; border-bottom: 2px solid #e8f5e9; padding-bottom: 10px; margin-top: 10px; }
-        .student-item { margin-bottom: 12px; padding: 10px; border-radius: 8px; background: #f9f9f9; border-left: 4px solid #2e7d32; }
-        .student-name { font-weight: bold; color: #222; display: block; font-size: 14px; }
-        .student-plants { font-size: 12px; color: #666; margin-top: 3px; font-style: italic; }
-        .close-btn { font-size: 35px; cursor: pointer; color: #bbb; float: right; line-height: 20px; }
-        .close-btn:hover { color: #c62828; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; text-align: center; }
+        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 400px; margin: auto; position: relative; border-top: 8px solid #2e7d32; }
+        h2 { color: #2e7d32; }
+        input, select, button { width: 100%; padding: 12px; margin: 10px 0; border-radius: 12px; border: 1px solid #ddd; box-sizing: border-box; font-size: 16px; }
+        button { background: #2e7d32; color: white; font-weight: bold; border: none; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #1b5e20; }
+        #status { font-weight: bold; margin: 20px 0; padding: 15px; border-radius: 12px; min-height: 50px; display: flex; align-items: center; justify-content: center; }
+        .zauzeto { background: #ffebee; color: #c62828; }
+        .slobodno { background: #e8f5e9; color: #2e7d32; }
         
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: #2e7d32; border-radius: 10px; }
+        /* Stilovi za bočni meni (Sidebar) */
+        .sidebar { position: fixed; top: 0; right: -100%; width: 300px; height: 100%; background: white; box-shadow: -5px 0 15px rgba(0,0,0,0.2); transition: 0.4s; z-index: 100; padding: 20px; text-align: left; overflow-y: auto; }
+        .sidebar.active { right: 0; }
+        .menu-btn { position: absolute; top: 15px; right: 20px; font-size: 30px; cursor: pointer; color: #2e7d32; z-index: 101; }
+        .close-btn { float: right; font-size: 30px; cursor: pointer; color: #999; }
+        .student-item { font-size: 14px; padding: 8px 0; border-bottom: 1px solid #eee; }
+        .student-name { font-weight: bold; display: block; color: #2e7d32; }
+        .student-plants { color: #555; font-style: italic; }
     </style>
 </head>
 <body>
@@ -39,84 +31,113 @@
 
 <div class="sidebar" id="sidebar">
     <span class="close-btn" onclick="toggleMenu()">×</span>
-    <h3>📋 Spisak Razreda</h3>
-    <div id="fullList"></div>
+    <h3>➕ Dodaj svoju biljku</h3>
+    <p style="font-size: 13px; color: #666;">Izaberi svoje ime i unesi biljku:</p>
+    
+    <select id="studentName">
+        <option>Adna Adorović</option><option>Aja Agić</option><option>Ajna Odobašić</option>
+        <option>Amina Karić</option><option>Amna Delić Husić</option><option>Arman Varešlija</option>
+        <option>Čamka Mehić</option><option>Danis Žigić</option><option>Davud Uzunović</option>
+        <option>Edina Jusić</option><option>Eldar Hajdarević</option><option>Ema Avdić</option>
+        <option>Emin Ređić</option><option>Emra Čajlaković</option><option>Hana Islambegović</option>
+        <option>Hana Talić</option><option>Hena Čobo</option><option>Ilhan Hibić</option>
+        <option>Iman Isaković</option><option>Iman Mahmutagić</option><option>Kerim Dedić</option>
+        <option>Mithat Zildžić</option><option>Nadina Kahriman</option><option>Nejla Smriko</option>
+        <option>Nejra Hazić</option><option>Sajra Čaluk</option><option>Sara Drapić</option>
+        <option>Sara Kavaz</option><option>Šejla Halilović</option><option>Zejneb Doglod</option>
+    </select>
+    
+    <input type="text" id="plantInput" placeholder="Naziv biljke (npr. Kamilica)">
+    <button onclick="savePlant()">SAČUVAJ NA SAJT</button>
+    
+    <hr>
+    <h3>📋 Spisak svih zauzetih biljaka</h3>
+    <div id="fullList">Učitavanje podataka iz tabele...</div>
 </div>
 
 <div class="card">
     <h2>🌿 Herbar Provjera</h2>
-    <p style="color: #666; font-size: 14px;">Provjeri da li je biljka zauzeta:</p>
-    <input type="text" id="pretraga" placeholder="Kucaj naziv biljke..." oninput="checkPlant()">
+    <p>Provjeri je li biljka već zauzeta:</p>
+    <input type="text" id="search" placeholder="Ukucaj naziv biljke..." oninput="checkPlant()">
     <div id="status">Ukucaj naziv za provjeru</div>
 </div>
 
 <script>
-    // --- BAZA PODATAKA RAZREDA ---
-    // Ovdje dopisuješ biljke unutar [" ", " "]
-    const podaci = {
-        "Adna Adorović": ["Drijen", "Lavanda", "Kupusnjača", "Lješnjak", "Jasmin"],
-        "Aja Agić": [],
-        "Ajna Odobašić": ["Ljubičica", "Jabuka", "Kruška", "Šljiva", "Lipa"],
-        "Amina Karić": ["Nana", "Menta", "Kunica", "Paradajz", "Domaća jagoda", "Jagorčevina"],
-        "Amna Delić Husić": ["Drača", "Kupina", "Lovor", "Zova", "Šipurak"],
-        "Arman Varešlija": [],
-        "Čamka Mehić": [],
-        "Danis Žigić": ["Smokva", "Vejgela", "Žalfija", "Tamaris", "Bagrem"],
-        "Davud Uzunović": ["Divlja jagoda", "Tamijan", "Loza", "Djetelina", "Paparoza"],
-        "Edina Jusić": [],
-        "Eldar Hajdarević": [],
-        "Ema Avdić": ["Kesten", "Bor", "Behar", "Višnja"],
-        "Emin Ređić": [],
-        "Emra Čajlaković": [],
-        "Hana Islambegović": [],
-        "Hana Talić": [],
-        "Hena Čobo": [],
-        "Ilhan Hibić": ["Hrast", "Dunja", "Dud", "Divlja metvica", "Joha"],
-        "Iman Isaković": ["paprika", "bujad", "Divlji anis", "Peršun", "Divlja ruža"],
-        "Iman Mahmutagić": [],
-        "Kerim Dedić": [],
-        "Mithat Zildžić": [],
-        "Nadina Kahriman": [],
-        "Nejla Smriko": [],
-        "Nejra Hazić": [],
-        "Sajra Čaluk": [],
-        "Sara Drapić": ["Maslačak", "Kopriva", "Čičak", "Bokvica", "Djetelina"],
-        "Sara Kavaz": ["Čempres", "Grožđe", "Pelargonija", "Petunija", "Smreka"],
-        "Šejla Halilović": [],
-        "Zejneb Doglod": []
-    };
+    // TVOJ LINK KOJI POVEZUJE SAJT I TABELU
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwkgb1vgEgc-6X-M3rcf8tcBTDMgzVpZ61cU1kE8ieEC5VzwNNVdIS0aQ2swURPt3FBsQ/exec';
+    let bazaPodataka = [];
+
+    // Funkcija koja uzima podatke iz Google tabele
+    async function loadData() {
+        try {
+            const response = await fetch(scriptURL);
+            const rawData = await response.json();
+            
+            // Grupisanje biljaka po učeniku za prikaz u listi
+            const grupisano = {};
+            rawData.forEach(item => {
+                if(!grupisano[item.ime]) grupisano[item.ime] = [];
+                // Razdvajamo ako je više biljaka upisano u jedan red (zarezom)
+                let biljke = item.biljka.split(',');
+                biljke.forEach(b => {
+                    if(b.trim()) grupisano[item.ime].push(b.trim());
+                });
+            });
+            
+            bazaPodataka = rawData; 
+            
+            const listDiv = document.getElementById('fullList');
+            listDiv.innerHTML = "";
+            
+            // Ako je tabela prazna
+            if (Object.keys(grupisano).length === 0) {
+                listDiv.innerHTML = "Još nema unesenih biljaka.";
+                return;
+            }
+
+            for(let ime in grupisano) {
+                listDiv.innerHTML += `<div class="student-item">
+                    <span class="student-name">${ime}</span>
+                    <span class="student-plants">${grupisano[ime].join(", ")}</span>
+                </div>`;
+            }
+        } catch (e) {
+            document.getElementById('fullList').innerHTML = "Greška: Ne mogu učitati tabelu.";
+        }
+    }
 
     function toggleMenu() {
         document.getElementById('sidebar').classList.toggle('active');
     }
 
+    // Funkcija za "peglanje" slova (č -> c, itd.)
     function normalizuj(t) {
         return t.toLowerCase().trim().replace(/č/g,"c").replace(/ć/g,"c").replace(/š/g,"s").replace(/ž/g,"z").replace(/đ/g,"d");
     }
 
+    // Funkcija za provjeru dostupnosti
     function checkPlant() {
-        let unos = normalizuj(document.getElementById('pretraga').value);
+        let unos = normalizuj(document.getElementById('search').value);
         let statusDiv = document.getElementById('status');
         
-        if (unos === "") {
-            statusDiv.innerHTML = "Ukucaj naziv za provjeru";
+        if (!unos) {
+            statusDiv.innerHTML = "Ukucaj naziv...";
             statusDiv.className = "";
             return;
         }
 
-        let pronadjeno = false;
-        let vlasnik = "";
-
-        for (let ime in podaci) {
-            if (podaci[ime].some(b => normalizuj(b) === unos)) {
-                pronadjeno = true;
-                vlasnik = ime;
-                break;
+        let pronadjenoIme = null;
+        
+        // Prolazimo kroz svaki red iz tabele
+        bazaPodataka.forEach(red => {
+            let biljkeURedu = red.biljka.split(',');
+            if(biljkeURedu.some(b => normalizuj(b) === unos)) {
+                pronadjenoIme = red.ime;
             }
-        }
+        });
 
-        if (pronadjeno) {
-            statusDiv.innerHTML = `<div>❌ ZAUZETO</div><div class="vlasnik">Biljku uzeo/la: <strong>${vlasnik}</strong></div>`;
+        if (pronadjenoIme) {
+            statusDiv.innerHTML = `❌ ZAUZETO<br>Uzeo/la: ${pronadjenoIme}`;
             statusDiv.className = "zauzeto";
         } else {
             statusDiv.innerHTML = "✅ SLOBODNO";
@@ -124,16 +145,43 @@
         }
     }
 
-    // Punjenje liste u sidebaru
-    const fullListDiv = document.getElementById('fullList');
-    for (let ime in podaci) {
-        let item = document.createElement('div');
-        item.className = 'student-item';
-        let biljkeText = podaci[ime].length > 0 ? podaci[ime].join(", ") : "Još nema upisanih biljaka";
-        item.innerHTML = `<span class="student-name">${ime}</span>
-                          <span class="student-plants">${biljkeText}</span>`;
-        fullListDiv.appendChild(item);
+    // Funkcija za slanje nove biljke u tabelu
+    async function savePlant() {
+        let ime = document.getElementById('studentName').value;
+        let biljka = document.getElementById('plantInput').value.trim();
+        
+        if (!biljka) {
+            alert("Molimo unesite naziv biljke!");
+            return;
+        }
+
+        // Provjera na samom sajtu prije slanja
+        let vecPostoji = false;
+        bazaPodataka.forEach(red => {
+            if(red.biljka.split(',').some(b => normalizuj(b) === normalizuj(biljka))) vecPostoji = true;
+        });
+
+        if (vecPostoji) {
+            alert("Ova biljka je već zauzeta! Provjeri ponovo.");
+            return;
+        }
+
+        alert("Spremam u tabelu... Sačekaj trenutak.");
+
+        try {
+            await fetch(scriptURL, {
+                method: 'POST',
+                body: JSON.stringify({ ime: ime, biljka: biljka })
+            });
+            alert("Uspješno sačuvano! Stranica će se osvježiti.");
+            location.reload();
+        } catch (e) {
+            alert("Došlo je do greške pri slanju podataka.");
+        }
     }
+
+    // Pokreni učitavanje podataka čim se stranica otvori
+    loadData();
 </script>
 
 </body>
