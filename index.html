@@ -32,33 +32,9 @@
 
         #fullList { padding-bottom: 20px; }
         #missingList { padding-bottom: 150px; }
-        /* Stil za kafu prank */
-.prank-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.9); z-index: 9999;
-    display: flex; align-items: center; justify-content: center;
-}
-.prank-box {
-    background: white; padding: 30px; border-radius: 20px;
-    max-width: 350px; text-align: center; border-top: 8px solid #ff9800;
-}
-.coffee-btn {
-    background: #ff9800; color: white; font-weight: bold;
-    padding: 15px; border: none; border-radius: 12px;
-    cursor: pointer; font-size: 18px; width: 100%; margin-top: 15px;
-}
-.coffee-btn:hover { background: #e65100; }
     </style>
 </head>
 <body>
-    <div class="prank-overlay" id="prankZid">
-    <div class="prank-box">
-        <h2 style="color: #e65100; margin-top: 0; font-family: 'Segoe UI', sans-serif;">⚠️ SISTEMSKO OBAVJEŠTENJE</h2>
-        <p style="font-size: 15px; color: #333; font-family: 'Segoe UI', sans-serif;">Pristup web stranici zahtijeva plaćanje.</p>
-        <p style="font-weight: bold; color: #2e7d32; font-family: 'Segoe UI', sans-serif;">☕ Plati traženi iznos (5 EURA) da otključaš pristup bazi i uneseš svoju biljku.</p>
-        <button class="coffee-btn" onclick="platiKafu()">💳 PLATI 5 EURA</button>
-    </div>
-</div>
 
 <div class="menu-btn" onclick="toggleMenu()">☰</div>
 
@@ -104,10 +80,6 @@
     const sviUcenici = ["Adna Adorović", "Aja Agić", "Ajna Odobašić", "Amina Karić", "Amna Delić Husić", "Arman Varešlija", "Čamka Mehić", "Danis Žigić", "Davud Uzunović", "Edina Jusić", "Eldar Hajdarević", "Ema Avdić", "Emra Čajlaković", "Hana Islambegović", "Hana Talić", "Hena Čobo", "Ilhan Hibić", "Iman Isaković", "Iman Mahmutagić", "Kerim Dedić", "Midhat Zildžić", "Nadina Kahriman", "Nejla Smriko", "Nejra Hazić", "Sajra Čaluk", "Sara Drapić", "Sara Kavaz", "Šejla Halilović", "Zejneb Doglod"];
     
     let bazaPodataka = [];
-    function platiKafu() {
-    alert("💸 Transakcija uspješna!\nHvala na pretplati!");
-    document.getElementById('prankZid').style.display = 'none';
-}
 
     async function loadData() {
         try {
